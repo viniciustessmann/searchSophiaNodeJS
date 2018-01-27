@@ -1,0 +1,5 @@
+
+Quarto,15,5;Cozinha,20,8;Sala,30,10;Banheiro,6,2;Sótão,12,20;Jardim,17,18
+Suíte,20,12;Banheiro,8,8;Jardim,8,20;Porão,15,18;Quarto,15,8;Sala,34,23
+Quarto,51,15;Cozinha,49,12
+Sala,34,10;Quarto,32,12;Cozinha,33,8
