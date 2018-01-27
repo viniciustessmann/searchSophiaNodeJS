@@ -1,0 +1,19 @@
+{
+  "name": "search-sophia-node-js",
+  "version": "1.0.0",
+  "description": "Where's Sophia, the cat",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/viniciustessmann/searchSophiaNodeJS.git"
+  },
+  "author": "Vinícius Schlee Tessmann <viniciusschleetessmann@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/viniciustessmann/searchSophiaNodeJS/issues"
+  },
+  "homepage": "https://github.com/viniciustessmann/searchSophiaNodeJS#readme"
+}
