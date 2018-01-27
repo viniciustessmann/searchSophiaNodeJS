@@ -20,6 +20,7 @@
   "homepage": "https://github.com/viniciustessmann/searchSophiaNodeJS#readme",
   "dependencies": {
     "formidable": "^1.1.1",
+    "line-by-line": "^0.1.6",
     "nodemon": "^1.14.11"
   }
 }

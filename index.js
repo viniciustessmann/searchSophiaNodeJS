@@ -1,25 +1,36 @@
 var http       = require('http'),
     formidable = require('formidable'),
     fs         = require('fs'),
-    file       = require('./modules/file');
+    file       = require('./modules/fileToDownload');
 
 var server = http.createServer(function(req, res){
 
     if (req.url == '/fileupload') {
 
+        var lines;
         var base = process.env.PWD
         var form = new formidable.IncomingForm();
+        var data;
+
         form.parse(req, function(err, fields, files) {
-            res.writeHead(200, {'content-type': 'text/plain'});
-            
+
             var oldpath = files.filetoupload.path;
             var newpath = base + '/files/input.txt'
             fs.rename(oldpath, newpath, function (err) {
                 if (err) throw err;
                 
                 file(newpath);
+                var readStream = fs.createReadStream(base + '/files/output.txt', 'utf8');
 
-                res.end();
+                readStream.on('data', function(chunk) {  
+                    data += chunk;
+                }).on('end', function() {
+
+                    var dataPrint = data.replace("undefined", "");
+
+                    res.writeHead(200, {'Content-Type': 'application/force-download','Content-disposition':'attachment; filename="output.txt"'});
+                    res.end(dataPrint);
+                });
             });
         });
     } else {
