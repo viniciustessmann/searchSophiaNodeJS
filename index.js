@@ -22,22 +22,6 @@ var server = http.createServer(function(req, res){
             });
         });
 
-        
-        // var form = new formidable.IncomingForm();
-
-
-        // form.parse(req, function(err, fields, files) {
-
-        //     var oldpath = files.filetoupload.path;
-        //     var newpath = process.env.PWD + '/files/input.txt'
-        //     fs.rename(oldpath, newpath, function (err) {
-        //         if (err) throw err;
-
-        //         res.write('Upload file now');
-        //         // file(newpath);
-        //         res.end();
-        //     });
-        // });
     } else {
 
         res.write("<h1>Where's Sophia</h1>");
