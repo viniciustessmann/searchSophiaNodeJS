@@ -1,44 +1,49 @@
-var http       = require('http'),
-    formidable = require('formidable'),
-    fs         = require('fs'),
-    file       = require('./modules/fileToDownload');
+var http         = require('http'),
+    fileModule   = require('./modules/fileModule'),
+    file         = require('./modules/fileToDownload'),
+    org          = require('./modules/organizeModule');
 
 var server = http.createServer(function(req, res){
 
     if (req.url == '/fileupload') {
 
-        var lines;
-        var base = process.env.PWD
-        var form = new formidable.IncomingForm();
-        var data;
+        fileModule.uploadFile(req).then(function(data){
 
-        form.parse(req, function(err, fields, files) {
+            org.organize(process.env.PWD + '/files/input.txt').then(function(data) {
 
-            var oldpath = files.filetoupload.path;
-            var newpath = base + '/files/input.txt'
-            fs.rename(oldpath, newpath, function (err) {
-                if (err) throw err;
-                
-                file(newpath);
-                var readStream = fs.createReadStream(base + '/files/output.txt', 'utf8');
+                fileModule.writeOutput(data).then(function(){
 
-                readStream.on('data', function(chunk) {  
-                    data += chunk;
-                }).on('end', function() {
+                    fileModule.readOutput().then(function(data){
 
-                    var dataPrint = data.replace("undefined", "");
-
-                    res.writeHead(200, {'Content-Type': 'application/force-download','Content-disposition':'attachment; filename="output.txt"'});
-                    res.end(dataPrint);
+                        res.writeHead(200, {'Content-Type': 'application/force-download','Content-disposition':'attachment; filename="output.txt"'});
+                        res.end(data);
+                    });        
                 });
             });
         });
-    } else {
+
         
+        // var form = new formidable.IncomingForm();
+
+
+        // form.parse(req, function(err, fields, files) {
+
+        //     var oldpath = files.filetoupload.path;
+        //     var newpath = process.env.PWD + '/files/input.txt'
+        //     fs.rename(oldpath, newpath, function (err) {
+        //         if (err) throw err;
+
+        //         res.write('Upload file now');
+        //         // file(newpath);
+        //         res.end();
+        //     });
+        // });
+    } else {
+
         res.write("<h1>Where's Sophia</h1>");
         res.write("<label>Input TXT</label>");
         res.write('<form action="fileupload" method="post" enctype="multipart/form-data">');
-        res.write('<input type="file" name="filetoupload" accept=".txt"><br><br>');
+        res.write('<input type="file" name="filetoupload" required accept=".txt"><br><br>');
         res.write('<input type="submit" value="Send">');
         res.write('</form>');
         res.end();

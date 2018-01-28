@@ -1,5 +1,7 @@
 var LineByLineReader = require('line-by-line');
 var fs = require('fs');
+var http = require('http');
+var q = require('q');
 
 module.exports = function (path) {
     
@@ -8,10 +10,11 @@ module.exports = function (path) {
     var count = countLine(path);
     var stringToPrint = '';
 
+    
     lr = new LineByLineReader(path);
 
     lr.on('error', function (err) {
-        // 'err' contains error object
+        console.log(err);
     });
 
     lr.on('line', function (line) {
@@ -62,7 +65,7 @@ function organize(data) {
     var stringToPrint = '';
     data.forEach(function (item) {
 
-        item.sort(dynamicSort("score"));
+        item.sort(compare);
 
         item.forEach(function (row) {
             stringToPrint += row.name + ',';
@@ -72,25 +75,34 @@ function organize(data) {
         stringToPrint += "\r\n";
     })
 
-    writeLine(stringToPrint);
+    writeLine(stringToPrint).then(function(){
+        console.log('okok');
+    });
 
 }
 
-function dynamicSort(property) {
-    var sortOrder = 1;
-    if(property[0] === "-") {
-        sortOrder = -1;
-        property = property.substr(1);
+function compare(a, b) {
+    const scoreA = a.score;
+    const scoreB = b.score;
+
+    let comparison = 0;
+    if (scoreA > scoreB) {
+        comparison = 1;
+    } else if (scoreA < scoreB) {
+        comparison = -1;
     }
-    return function (a,b) {
-        var result = (a[property] < b[property]) ? -1 : (a[property] > b[property]) ? 0 : 1;
-        return result * sortOrder;
-    }
+    return comparison;
 }
+
 
 function writeLine(string) {
 
-    var fs = require('fs');
-    fs.writeFile(process.env.PWD + '/files/output.txt', string, function(err) {
-    }); 
+    return new Promise(function (fulfill, reject){
+        fs.writeFile(process.env.PWD + '/files/output.txt', string,  function(err) {
+            if(err) {
+                return console.log(err);
+            }
+            console.log("The file was saved!");
+        }); 
+    });
 }
