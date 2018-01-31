@@ -46,9 +46,3 @@ exports.uploadFile = function (req) {
         });
   });
 }
-
-exports.organize = function (path) {
-  return new Promise(function (resolve, reject) {
-    
-  });
-}
